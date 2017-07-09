@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<h2>蒸汽壓力記錄</h2>
+<div class="jumbotron">
+    @section scripts
+    {
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script>
+
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(DownloadChartData);
+
+        function DownloadChartData() {
+            $.ajax({
+                url: '@Url.Action("GetChartData", "Home")',
+                success: function (response) {
+                    ShowChart(response);
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        };
+        function ShowChart(data) {
+            var options = {
+                title: '鍊條式燃煤蒸汽鍋爐蒸汽壓力記錄',
+                width: 1000, height: 300,
+                axisTitlesPosition: "蒸汽壓力記錄",
+
+                leged: { ponsition: 'in' },
+                chartArea: {  width: "70%", height: "50%" },
+               
+                vAxis: {
+
+                    
+                    title: '蒸汽壓力(kgf/cm2G)'
+                    
+                },
+                hAxis: {
+                    
+                    title: '時間',
+                    direction: '-1',
+                    slantedText: 'false',
+                    showTextEvery:'1'
+
+
+                },
+
+                animation:
+                {
+                    duration: 1000,
+                    easing: 'in',
+                    startup: true
+                }
+
+            };
+            var dataTable = new google.visualization.DataTable(data.dataTable);
+            var chart = new google.visualization.LineChart(document.getElementById('chart-area'));
+            chart.draw(dataTable, options);
+        };
+        </script>
+    }
+
+    <div class="row">
+        <div class="col-md-8">
+            <div id="chart-area" style="position :center"></div>
+        </div>
+    </div>
+    </div>

@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<h2>蒸汽壓力預測</h2>
+<div class="jumbotron">
+    <table id="myTable" style="border:groove">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Estimate</th>
+                <th>Actual</th>
+                <th>Difference</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<style>
+    tr.odd {
+        background-color: #CCEEFF !important;
+    }
+</style>
+
+@* Load datatable css *@
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+@* Load datatable js *@
+@section Scripts{
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>">
+    <script>
+        $(document).ready(function () {
+            serverSide: true,
+                $('#myTable').DataTable({
+                    "ajax": {
+                        "url": "/home/loaddata",
+                        "type": "GET",
+                        "datatype": "json"
+                    },
+                    "columns": [
+                        { "data": "Time", "autoWidth": true },
+                        { "data": "EstimatePressure", "autoWidth": true },
+                    { "data": "ActualPressure", "autoWidth": true },
+                        { "data": "PressureDiff", "autoWidth": true }
+                    ]
+                });
+        });
+    </script>
+}
